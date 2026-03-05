@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>System Access Terminal</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:monospace;
+}
+
+body{
+background:black;
+color:#00ff9c;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+/* Terminal box */
+
+.terminal{
+width:90%;
+max-width:900px;
+background:#000;
+border:2px solid #00ff9c;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 25px #00ff9c;
+}
+
+/* Header */
+
+.header{
+margin-bottom:15px;
+font-size:18px;
+color:#00ffaa;
+}
+
+/* Output area */
+
+#output{
+min-height:200px;
+line-height:1.6;
+white-space:pre-wrap;
+}
+
+/* Input line */
+
+.input-line{
+display:flex;
+margin-top:10px;
+}
+
+.prompt{
+margin-right:8px;
+}
+
+input{
+background:none;
+border:none;
+outline:none;
+color:#00ff9c;
+width:100%;
+font-size:16px;
+}
+
+/* blinking cursor */
+
+input::placeholder{
+color:#007a4f;
+}
+
+/* responsive */
+
+@media (max-width:600px){
+
+.terminal{
+padding:15px;
+}
+
+.header{
+font-size:15px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="terminal">
+
+<div class="header">
+SYSTEM ACCESS TERMINAL v1.0
+</div>
+
+<div id="output">
+Initializing system...
+Access granted.
+Type "help" for commands.
+</div>
+
+<div class="input-line">
+<span class="prompt">></span>
+<input id="command" placeholder="enter command...">
+</div>
+
+</div>
+
+<script>
+
+const input = document.getElementById("command")
+const output = document.getElementById("output")
+
+const commands = {
+
+help: `
+Available commands:
+
+help     : show commands
+about    : system info
+clear    : clear terminal
+date     : show current date
+`,
+
+about: `
+System Access Terminal
+Version 1.0
+Web Interface Simulation
+`,
+
+date: () => new Date().toString()
+
+}
+
+input.addEventListener("keydown", function(e){
+
+if(e.key === "Enter"){
+
+let cmd = input.value.trim()
+
+output.innerHTML += "\n> " + cmd
+
+if(cmd === "clear"){
+output.innerHTML = ""
+}
+
+else if(commands[cmd]){
+
+if(typeof commands[cmd] === "function"){
+output.innerHTML += "\n" + commands[cmd]()
+}
+else{
+output.innerHTML += "\n" + commands[cmd]
+}
+
+}
+
+else{
+output.innerHTML += "\nCommand not found"
+}
+
+input.value=""
+window.scrollTo(0,document.body.scrollHeight)
+
+}
+
+})
+
+</script>
+
+</body>
+</html>
